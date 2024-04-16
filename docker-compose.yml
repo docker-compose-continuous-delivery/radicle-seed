@@ -1,35 +1,14 @@
 services:
-  radicle-node:
-    image: gcr.io/radicle-services/radicle-node:${RADICLE_IMAGE_TAG:-latest}
-    container_name: radicle-node
+  radicle:
+    image: ghcr.io/ozeliurs/radicle-seed-docker/radicle:latest
+    container_name: radicle
     restart: unless-stopped
-    command: --force
     environment:
-      RUST_LOG: debug
-      RAD_PASSPHRASE: seed
-      RUST_BACKTRACE: 1
-      USER: ${USER}
+      - RAD_ALIAS=seed.ozeliurs.com
     volumes:
       - ./heartwood:/root/
-    init: true
     ports:
       - 8776:8776
-    networks:
-      - traefik
-    labels:
-      - "traefik.enable=false"
-
-  radicle-httpd:
-    image: gcr.io/radicle-services/radicle-httpd:${RADICLE_IMAGE_TAG:-latest}
-    container_name: radicle-httpd
-    restart: unless-stopped
-    environment:
-      RUST_LOG: debug
-      RUST_BACKTRACE: 1
-      USER: ${USER}
-    volumes:
-      - ./heartwood:/root/
-    init: true
     networks:
       - traefik
     labels:
