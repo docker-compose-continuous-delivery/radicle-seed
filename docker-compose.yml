@@ -3,6 +3,7 @@ services:
     image: gcr.io/radicle-services/radicle-node:${RADICLE_IMAGE_TAG:-latest}
     container_name: radicle-node
     restart: unless-stopped
+    command: --force
     environment:
       RUST_LOG: debug
       RAD_PASSPHRASE: seed
