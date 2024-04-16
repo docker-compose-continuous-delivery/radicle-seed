@@ -1,26 +1,43 @@
-version: "3.9"
-
 services:
-
-  hello-world:
-    image: "traefik/whoami"
-    container_name: "simple-service"
+  radicle-node:
+    image: gcr.io/radicle-services/radicle-node:${RADICLE_IMAGE_TAG:-latest}
+    container_name: radicle-node
     restart: unless-stopped
+    environment:
+      RUST_LOG: debug
+      RAD_PASSPHRASE: seed
+      RUST_BACKTRACE: 1
+      USER: ${USER}
+    volumes:
+      - ./heartwood:/root/
+    # init: true
+    ports:
+      - 8776:8776
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=false"
+
+  radicle-httpd:
+    image: gcr.io/radicle-services/radicle-httpd:${RADICLE_IMAGE_TAG:-latest}
+    container_name: radicle-httpd
+    restart: unless-stopped
+    environment:
+      RUST_LOG: debug
+      RUST_BACKTRACE: 1
+      USER: ${USER}
+    volumes:
+      - ./heartwood:/root/
+    # init: true
     networks:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.simple-service.rule=Host(`hello-world.${BASE_DOMAIN:-ozeliurs.com}`)"
+      - "traefik.http.routers.simple-service.rule=Host(`seed.${BASE_DOMAIN:-ozeliurs.com}`)"
       - "traefik.http.routers.simple-service.entrypoints=websecure"
       - "traefik.http.routers.simple-service.tls=true"
       - "traefik.http.routers.simple-service.tls.certresolver=cloudflare"
-      - "traefik.http.services.simple-service.loadbalancer.server.port=80"
-    healthcheck:
-      test: [ "CMD", "wget", "-q", "--spider", "http://localhost:80" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
+      - "traefik.http.services.simple-service.loadbalancer.server.port=8080"
 
 networks:
   traefik:
