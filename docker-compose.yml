@@ -10,7 +10,7 @@ services:
       USER: ${USER}
     volumes:
       - ./heartwood:/root/
-    # init: true
+    init: true
     ports:
       - 8776:8776
     networks:
@@ -28,7 +28,7 @@ services:
       USER: ${USER}
     volumes:
       - ./heartwood:/root/
-    # init: true
+    init: true
     networks:
       - traefik
     labels:
