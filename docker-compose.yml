@@ -4,7 +4,7 @@ services:
     container_name: radicle
     restart: unless-stopped
     environment:
-      - RAD_ALIAS=seed.ozeliurs.com
+      - RAD_ALIAS=nut.ozeliurs.com
     volumes:
       - ./heartwood:/root/
     ports:
