@@ -9,16 +9,3 @@ services:
       - ./heartwood:/root/
     ports:
       - 8776:8776
-    networks:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.simple-service.rule=Host(`seed.${BASE_DOMAIN:-ozeliurs.com}`)"
-      - "traefik.http.routers.simple-service.entrypoints=websecure"
-      - "traefik.http.routers.simple-service.tls=true"
-      - "traefik.http.routers.simple-service.tls.certresolver=cloudflare"
-      - "traefik.http.services.simple-service.loadbalancer.server.port=8080"
-
-networks:
-  traefik:
-    external: true
